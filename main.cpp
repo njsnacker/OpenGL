@@ -1,0 +1,167 @@
+#include <iostream>
+#include <thread>
+#include <chrono>
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+
+const uint32_t WINDOW_HEIGHT  = 1080;
+const uint32_t WINDOW_WIDTH = 1920;
+const uint32_t WINDOW_FPS = 60;
+const char* WINDOW_TITLE = "OpenGL Renderer";
+
+static float gCurerntTime = 0;
+static float gDeltaTime = 0;
+static float gLastTime = 0;
+static float gCurrentFPS = 0;
+
+
+using namespace std;
+
+int main() {
+
+	/******* GLEW, GLFW init... **************************************/
+	glewExperimental = true; // Needed for core profile
+	if (!glfwInit())
+	{
+		cerr << "Failed to initialize GLFW" << endl;
+		return -1;
+	}
+
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, NULL, NULL);
+
+	if (window == NULL) {
+		cerr << "Failed to create GLFW window" << endl;
+		glfwTerminate();
+		return -1;
+	}
+
+
+	glfwMakeContextCurrent(window);
+	glfwSetCursorPos(window, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	// callback here
+	// glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	// glfwSetKeyCallback(window, key_callback);
+	// glfwSetCursorPosCallback(window, mouse_callback);
+	// glfwSetMouseButtonCallback(window, mouse_button_callback);
+
+	glewExperimental = true;
+
+
+	glewExperimental = true; // Needed in core profile
+	if (glewInit() != GLEW_OK) {
+		cerr << "Failed to initialize GLEW" << endl;
+		return -1;
+	}
+	cout << "Status: Using GLEW " << glewGetString(GLEW_VERSION) << endl;
+
+	glClearColor(156/255.0f, 167/255.0f, 186/255.0f, 1);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
+	glEnable(GL_NORMALIZE);
+	glShadeModel(GL_SMOOTH);
+	glDisable(GL_COLOR_MATERIAL);
+	glLoadIdentity();
+	/******* Init END! ***********************************************/
+
+
+	// world.use_shader("vertex_shader.glsl", "fragment_shader.glsl");
+	// glUseProgram(world.m_shader_id);
+
+
+	// /************* Asset loading Start... ****************************/
+	// // set gun
+	// world.m_fixed.push_back(Model("../Assets/wapon.dae"));
+	// world.m_fixed[0].scale(0.2f);
+	// world.m_fixed[0].rotate(glm::radians(-100.0f), glm::vec3(1, 0, 0));
+	// world.m_fixed[0].rotate(glm::radians(190.0f), glm::vec3(0, 1, 0));
+	// world.m_fixed[0].rotate(glm::radians(-10.0f), glm::vec3(0, 0, 1));
+	// world.m_fixed[0].translate(glm::vec3(0.3f, -0.4f, -0.5f));
+	// for (auto &itr : world.m_fixed) {
+	// 	itr.update_meshes();
+	// }
+
+	// // main object
+	// world.m_objects.push_back(Model("../Assets/monster.dae"));
+	// world.m_objects[0].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	// world.m_objects.push_back(Model("../Assets/bullet.dae"));
+	// world.m_objects[1].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	// world.m_objects.push_back(Model("../Assets/particle.dae"));
+	// for (auto &itr : world.m_objects) {
+	// 	itr.update_meshes();
+	// }
+
+	// // set terrarians 
+	// world.m_terrarians.push_back(Model("../Assets/plane.dae"));
+	// world.m_terrarians.push_back(Model("../Assets/ship.dae"));
+	// world.m_terrarians[1].scale(2.0f);
+	// world.m_terrarians[1].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	// world.m_terrarians[1].translate(glm::vec3(0,30,0));
+	// world.m_terrarians.push_back(Model("../Assets/sky.dae"));
+	// for (auto &itr : world.m_terrarians) {
+	// 	itr.update_meshes();
+	// }
+
+	// cout << "Asseets load end " << endl;
+	// /********* Asset loading End... **********************************/
+
+
+	//world.init_physics();
+	//GL_btDebugDraw bulletDebugugger;
+	//bulletDebugugger.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+	//world.m_dynamicsWorld->setDebugDrawer(&bulletDebugugger);
+	//world.m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
+
+
+	// g_start_time = glfwGetTime();
+	// float tmp_total_time = 0;
+	// render loop
+
+	while (!glfwWindowShouldClose(window)) {
+		//aminmate_gun(g_delta_time, world);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//glUseProgram(world.m_shader_id);
+		// world.m_camera.update_pos();
+		// world.update_physics(g_delta_time);
+		// world.draw();
+		//world.m_dynamicsWorld->debugDrawWorld();
+
+		
+		
+		// //glUseProgram(0);
+		// if (world.m_monsters.size() > CONFIG_DEAD_FLAG) break;
+
+		// RenderText(chracter_shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
+		// RenderText(chracter_shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
+
+		 glfwSwapBuffers(window);
+		 glfwPollEvents();
+
+
+		// frame control
+		gCurerntTime = glfwGetTime();
+		gDeltaTime = gCurerntTime - gLastTime;
+		gLastTime = gCurerntTime;
+
+		if (gDeltaTime <= (1 / WINDOW_FPS)) {
+			this_thread::sleep_for(chrono::duration<float>(1 / WINDOW_FPS));
+			gCurrentFPS = 60;
+		}
+		else {
+			gCurrentFPS = 1 / gDeltaTime;
+		}
+
+		cout << "Current FPS : " << gCurrentFPS << endl;
+	}
+
+	glfwTerminate();
+	return 0;
+}
