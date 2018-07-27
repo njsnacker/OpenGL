@@ -85,12 +85,12 @@ int main() {
 	cube->vertices = vector<Vertex> {
 		Vertex {glm::vec3(0.5,0.5,0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,0.5,0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(0.5,-0.5,0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,-0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,-0.5,0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(0.5,0.5,-0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,0.5,-0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(0.5,-0.5,-0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(-0.5,-0.5,-0.5), glm::vec2(0,0)}
+		Vertex {glm::vec3(-0.5,-0.5,-0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,-0.5,-0.5), glm::vec2(0,0)}
 	};
 	cube->indices = vector<uint32_t> {
 		0,1,2,
@@ -124,12 +124,7 @@ int main() {
 	
 	World* world = new World{};
 	world->worldShader.push_back(shader);
- 	world->models.push_back(triangle);
-
-
-
-	// world.use_shader("vertex_shader.glsl", "fragment_shader.glsl");
-	// glUseProgram(world.m_shader_id);
+ 	world->models.push_back(cube);
 
 
 	// /************* Asset loading Start... ****************************/
@@ -175,10 +170,6 @@ int main() {
 	//world.m_dynamicsWorld->setDebugDrawer(&bulletDebugugger);
 	//world.m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 
-
-	// g_start_time = glfwGetTime();
-	// float tmp_total_time = 0;
-	// render loop
 
 	while (!glfwWindowShouldClose(window)) {
 		
