@@ -4,10 +4,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "World.hpp"
+#include "Model.hpp"
+#include "Light.hpp"
+#include "Shader.hpp"
 
-const uint32_t WINDOW_HEIGHT  = 1080;
-const uint32_t WINDOW_WIDTH = 1920;
-const uint32_t WINDOW_FPS = 60;
+
+
+//const uint32_t WINDOW_HEIGHT  = 1080;
+//const uint32_t WINDOW_WIDTH = 1920;
+const uint32_t WINDOW_HEIGHT  = 600;
+const uint32_t WINDOW_WIDTH = 800;
+const float WINDOW_FPS = 60;
 const char* WINDOW_TITLE = "OpenGL Renderer";
 
 static float gCurerntTime = 0;
@@ -43,7 +51,7 @@ int main() {
 
 	glfwMakeContextCurrent(window);
 	glfwSetCursorPos(window, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// callback here
 	// glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
@@ -70,6 +78,54 @@ int main() {
 	glDisable(GL_COLOR_MATERIAL);
 	glLoadIdentity();
 	/******* Init END! ***********************************************/
+
+
+
+	Model* cube = new Model{};
+	cube->vertices = vector<Vertex> {
+		Vertex {glm::vec3(0.5,0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(-0.5,0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,-0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(-0.5,-0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,0.5,-0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(-0.5,0.5,-0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,-0.5,-0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(-0.5,-0.5,-0.5), glm::vec2(0,0)}
+	};
+	cube->indices = vector<uint32_t> {
+		0,1,2,
+		0,2,3,
+		4,0,3,
+		4,3,7,
+		5,1,0,
+		5,0,4,
+		6,7,3,
+		6,3,2,
+		1,5,6,
+		1,6,2,
+		6,5,4,
+		6,4,7
+	};
+	cube->setupModel();
+
+
+	Model* triangle = new Model{};
+	triangle->vertices = vector<Vertex> {
+		Vertex {glm::vec3(0.5,0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(-0.5,0.5,0.5), glm::vec2(0,0)},
+		Vertex {glm::vec3(0.5,-0.5,0.5), glm::vec2(0,0)},
+	};
+	triangle->indices = vector<uint32_t> {
+		0,1,2
+	};
+	triangle->setupModel();
+	
+	Shader* shader = new Shader{"vert.glsl", "frag.glsl"};
+	
+	World* world = new World{};
+	world->worldShader.push_back(shader);
+ 	world->models.push_back(triangle);
+
 
 
 	// world.use_shader("vertex_shader.glsl", "fragment_shader.glsl");
@@ -125,9 +181,11 @@ int main() {
 	// render loop
 
 	while (!glfwWindowShouldClose(window)) {
-		//aminmate_gun(g_delta_time, world);
+		
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		glUseProgram(world->worldShader[0]->shaderId);
+		world->draw();
 		//glUseProgram(world.m_shader_id);
 		// world.m_camera.update_pos();
 		// world.update_physics(g_delta_time);
@@ -142,8 +200,8 @@ int main() {
 		// RenderText(chracter_shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
 		// RenderText(chracter_shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
 
-		 glfwSwapBuffers(window);
-		 glfwPollEvents();
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 
 
 		// frame control
@@ -153,13 +211,11 @@ int main() {
 
 		if (gDeltaTime <= (1 / WINDOW_FPS)) {
 			this_thread::sleep_for(chrono::duration<float>(1 / WINDOW_FPS));
-			gCurrentFPS = 60;
 		}
-		else {
-			gCurrentFPS = 1 / gDeltaTime;
-		}
+		
+		gCurrentFPS = 1 / gDeltaTime;
 
-		cout << "Current FPS : " << gCurrentFPS << endl;
+		//glUseProgramcout << "Current FPS : " << gCurrentFPS << endl;
 	}
 
 	glfwTerminate();

@@ -1,5 +1,11 @@
 {
     "files.associations": {
-        "thread": "cpp"
+        "thread": "cpp",
+        "algorithm": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "array": "cpp",
+        "string_view": "cpp",
+        "deque": "cpp"
     }
 }
