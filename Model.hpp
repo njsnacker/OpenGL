@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <glm/common.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include "Shader.hpp"
 
@@ -16,18 +17,39 @@ public:
 
 class Model {
 public:
-    vector<Vertex> vertices;
-    vector<uint32_t> indices;
+    static vector<Vertex> vertices;
+    static vector<uint32_t> indices;
     glm::vec3 centorPos, maxPos, minPos;
+    glm::mat4 modelMatrix;
 
     GLuint VAO, VBO, EBO;
 
     Model() {
-
+        modelMatrix = glm::mat4{1};
     }
 
     ~Model() {
 
+    }
+
+    static void setVertices(vector<Vertex> vertices_) {
+        Model::vertices = vertices_;
+    }
+
+    static void setIndices(vector<uint32_t> indices_) {
+        Model::indices = indices_;
+    }
+
+    void transliate(glm::vec3 movement_) {
+        modelMatrix = modelMatrix * glm::translate(movement_);
+    }
+
+    void rotate(glm::vec3 axis_, float angle_) {
+        modelMatrix = modelMatrix * glm::rotate(angle_, axis_);
+    }
+
+    void scale(float factor_) {
+        modelMatrix = modelMatrix * glm::scale(glm::vec3{factor_});
     }
 
     void setupModel() {
@@ -37,7 +59,7 @@ public:
         glGenBuffers(1, &EBO);
 
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW); 
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), &indices[0], GL_STATIC_DRAW);
@@ -66,7 +88,8 @@ public:
     }
 
     void draw(Shader* pShader) {
-        //glUseProgram(pShader->shaderId);
+        glUseProgram(pShader->shaderId);
+        pShader->set_uniform("modelMatrix",modelMatrix);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBindVertexArray(VAO);
@@ -75,3 +98,5 @@ public:
     }
 };
 
+vector<Vertex> Model::vertices;
+vector<uint32_t> Model::indices;

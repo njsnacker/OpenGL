@@ -1,6 +1,7 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <cmath>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -11,10 +12,10 @@
 
 
 
-//const uint32_t WINDOW_HEIGHT  = 1080;
-//const uint32_t WINDOW_WIDTH = 1920;
-const uint32_t WINDOW_HEIGHT  = 600;
-const uint32_t WINDOW_WIDTH = 800;
+const uint32_t WINDOW_HEIGHT  = 1080; //1080
+const uint32_t WINDOW_WIDTH = 1920; //1920
+//const uint32_t WINDOW_HEIGHT  = 600;
+//const uint32_t WINDOW_WIDTH = 800;
 const float WINDOW_FPS = 60;
 const char* WINDOW_TITLE = "OpenGL Renderer";
 
@@ -75,14 +76,14 @@ int main() {
 	glDepthFunc(GL_LESS);
 	glEnable(GL_NORMALIZE);
 	glShadeModel(GL_SMOOTH);
-	glDisable(GL_COLOR_MATERIAL);
+	//glDisable(GL_COLOR_MATERIAL);
 	glLoadIdentity();
 	/******* Init END! ***********************************************/
 
 
 
 	Model* cube = new Model{};
-	cube->vertices = vector<Vertex> {
+	cube->setVertices(vector<Vertex> {
 		Vertex {glm::vec3(0.5,0.5,0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,0.5,0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,-0.5,0.5), glm::vec2(0,0)},
@@ -90,9 +91,16 @@ int main() {
 		Vertex {glm::vec3(0.5,0.5,-0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,0.5,-0.5), glm::vec2(0,0)},
 		Vertex {glm::vec3(-0.5,-0.5,-0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(0.5,-0.5,-0.5), glm::vec2(0,0)}
-	};
-	cube->indices = vector<uint32_t> {
+		Vertex {glm::vec3(0.5,-0.5,-0.5), glm::vec2(0,0)},
+
+		//triangle
+		Vertex {glm::vec3(1,1,1), glm::vec2(0,0)},
+		Vertex {glm::vec3(2,2,1), glm::vec2(0,0)},
+		Vertex {glm::vec3(1,2,1), glm::vec2(0,0)},
+		
+	});
+	
+	cube->setIndices(vector<uint32_t> {
 		0,1,2,
 		0,2,3,
 		4,0,3,
@@ -104,22 +112,15 @@ int main() {
 		1,5,6,
 		1,6,2,
 		6,5,4,
-		6,4,7
-	};
+		6,4,7,
+
+		//triangle
+		8,9,10
+	});
 	cube->setupModel();
-
-
-	Model* triangle = new Model{};
-	triangle->vertices = vector<Vertex> {
-		Vertex {glm::vec3(0.5,0.5,0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(-0.5,0.5,0.5), glm::vec2(0,0)},
-		Vertex {glm::vec3(0.5,-0.5,0.5), glm::vec2(0,0)},
-	};
-	triangle->indices = vector<uint32_t> {
-		0,1,2
-	};
-	triangle->setupModel();
 	
+
+
 	Shader* shader = new Shader{"vert.glsl", "frag.glsl"};
 	
 	World* world = new World{};
@@ -170,9 +171,12 @@ int main() {
 	//world.m_dynamicsWorld->setDebugDrawer(&bulletDebugugger);
 	//world.m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 
-
+	cube->scale(0.5);
 	while (!glfwWindowShouldClose(window)) {
 		
+		
+		cube->rotate(glm::vec3(1,1,1), 0.03);
+
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		glUseProgram(world->worldShader[0]->shaderId);
