@@ -18,14 +18,22 @@ const uint32_t WINDOW_WIDTH = 1920; //1920
 //const uint32_t WINDOW_WIDTH = 800;
 const float WINDOW_FPS = 60;
 const char* WINDOW_TITLE = "OpenGL Renderer";
+World* world;
 
 static float gCurerntTime = 0;
 static float gDeltaTime = 0;
 static float gLastTime = 0;
 static float gCurrentFPS = 0;
 
-
 using namespace std;
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	world->cam->resize(width, height);
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+	world->cam->updateDolly(yoffset);
+}
 
 int main() {
 
@@ -55,7 +63,10 @@ int main() {
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// callback here
-	// glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetScrollCallback(window, scroll_callback);
+
+
 	// glfwSetKeyCallback(window, key_callback);
 	// glfwSetCursorPosCallback(window, mouse_callback);
 	// glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -123,10 +134,10 @@ int main() {
 
 	Shader* shader = new Shader{"vert.glsl", "frag.glsl"};
 	
-	World* world = new World{};
+	world = new World{};
 	world->worldShader.push_back(shader);
  	world->models.push_back(cube);
-
+	
 
 	// /************* Asset loading Start... ****************************/
 	// // set gun
@@ -171,7 +182,6 @@ int main() {
 	//world.m_dynamicsWorld->setDebugDrawer(&bulletDebugugger);
 	//world.m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
 
-	cube->scale(0.5);
 	while (!glfwWindowShouldClose(window)) {
 		
 		

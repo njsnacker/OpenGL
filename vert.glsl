@@ -12,7 +12,7 @@ out vec3 pos;
 
 void main() {
 	//gl_Position = mvp * vec4(a_pos.xyz , 1.0);
-    gl_Position =  modelMatrix * vec4(a_pos.xyz , 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(a_pos.xyz , 1.0);
 	uv = a_texture;
 	pos = a_pos;
 }
