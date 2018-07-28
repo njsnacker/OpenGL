@@ -35,6 +35,34 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	world->cam->updateDolly(yoffset);
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+	if (button == GLFW_MOUSE_BUTTON_RIGHT) { 
+		if (action == GLFW_PRESS) {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			world->cam->startRotation(xpos, ypos);
+		} else if (action == GLFW_RELEASE) {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			world->cam->endRotation(xpos, ypos);
+		}
+		
+	}
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		if(action == GLFW_PRESS) {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			gl_world.camera_.StartMousePan(xpos, ypos);
+		} else if {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+
+			gl_world.camera_.EndMousePan(xpos, ypos);
+		}	
+	}
+}
+
 int main() {
 
 	/******* GLEW, GLFW init... **************************************/
@@ -65,11 +93,11 @@ int main() {
 	// callback here
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-
+ 	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// glfwSetKeyCallback(window, key_callback);
 	// glfwSetCursorPosCallback(window, mouse_callback);
-	// glfwSetMouseButtonCallback(window, mouse_button_callback);
+	
 
 	glewExperimental = true;
 
