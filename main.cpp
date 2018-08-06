@@ -49,18 +49,18 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		
 	}
 
-	// if (button == GLFW_MOUSE_BUTTON_LEFT) {
-	// 	if(action == GLFW_PRESS) {
-	// 		double xpos, ypos;
-	// 		glfwGetCursorPos(window, &xpos, &ypos);
-	// 		gl_world->camera_.StartMousePan(xpos, ypos);
-	// 	} else if {
-	// 		double xpos, ypos;
-	// 		glfwGetCursorPos(window, &xpos, &ypos);
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		if(action == GLFW_PRESS) {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			gl_world.camera_.StartMousePan(xpos, ypos);
+		} else if {
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
 
-	// 		gl_world.camera_.EndMousePan(xpos, ypos);
-	// 	}	
-	// }
+			gl_world.camera_.EndMousePan(xpos, ypos);
+		}	
+	}
 }
 
 int main() {

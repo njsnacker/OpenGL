@@ -54,7 +54,7 @@ public:
     }
 
     void updateTrackball() {
-        //
+        glm::vec3 va = get_arch
     }
 
     void updateDolly(float dolly_) {
