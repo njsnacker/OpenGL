@@ -10,9 +10,11 @@
 #include "Light.hpp"
 #include "Shader.hpp"
 
+#include "./CUDA/kernel.hpp"
 
 
-const uint32_t WINDOW_HEIGHT  = 1080; //1080
+
+const uint32_t WINDOW_HEIGHT  = 1080; //108function0
 const uint32_t WINDOW_WIDTH = 1920; //1920
 //const uint32_t WINDOW_HEIGHT  = 600;
 //const uint32_t WINDOW_WIDTH = 800;
@@ -49,22 +51,25 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 		
 	}
 
-	if (button == GLFW_MOUSE_BUTTON_LEFT) {
-		if(action == GLFW_PRESS) {
-			double xpos, ypos;
-			glfwGetCursorPos(window, &xpos, &ypos);
-			gl_world.camera_.StartMousePan(xpos, ypos);
-		} else if {
-			double xpos, ypos;
-			glfwGetCursorPos(window, &xpos, &ypos);
+	// if (button == GLFW_MOUSE_BUTTON_LEFT) {
+	// 	if(action == GLFW_PRESS) {
+	// 		double xpos, ypos;
+	// 		glfwGetCursorPos(window, &xpos, &ypos);
+	// 		gl_world.camera_.StartMousePan(xpos, ypos);
+	// 	} else if {
+	// 		double xpos, ypos;
+	// 		glfwGetCursorPos(window, &xpos, &ypos);
 
-			gl_world.camera_.EndMousePan(xpos, ypos);
-		}	
-	}
+	// 		gl_world.camera_.EndMousePan(xpos, ypos);
+	// 	}	
+	// }
 }
 
 int main() {
 
+	cudaFunc();
+
+	
 	/******* GLEW, GLFW init... **************************************/
 	glewExperimental = true; // Needed for core profile
 	if (!glfwInit())

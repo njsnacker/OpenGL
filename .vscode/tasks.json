@@ -6,7 +6,10 @@
         {
             "label": "buil",
             "type": "shell",
-            "command": "g++ -std=c++14 -g -o OpenGL_Renderer *.cpp -lglfw -lGLEW -lGL",
+            "command": "nvcc -std=c++14 -g -o OpenGL_Renderer *.cpp ${workspaceFolder}/CUDA/*.cu -lglfw -lGLEW -lGL",
+            "args": [
+            
+            ],
             "group": {
                 "kind": "build",
                 "isDefault": true

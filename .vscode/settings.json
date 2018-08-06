@@ -9,6 +9,7 @@
         "deque": "cpp",
         "ostream": "cpp",
         "iostream": "cpp",
-        "*.tcc": "cpp"
+        "*.tcc": "cpp",
+        "cmath": "cpp"
     }
 }
