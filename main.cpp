@@ -122,14 +122,7 @@ int main()
 		Vertex{glm::vec3(0.5, 0.5, -0.5), glm::vec2(0, 0)},
 		Vertex{glm::vec3(-0.5, 0.5, -0.5), glm::vec2(0, 0)},
 		Vertex{glm::vec3(-0.5, -0.5, -0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(0.5, -0.5, -0.5), glm::vec2(0, 0)},
-
-		//triangle
-		Vertex{glm::vec3(1, 1, 1), glm::vec2(0, 0)},
-		Vertex{glm::vec3(2, 2, 1), glm::vec2(0, 0)},
-		Vertex{glm::vec3(1, 2, 1), glm::vec2(0, 0)},
-
-	});
+		Vertex{glm::vec3(0.5, -0.5, -0.5), glm::vec2(0, 0)}});
 
 	cube->setIndices(vector<uint32_t>{
 		0, 1, 2,
@@ -143,17 +136,17 @@ int main()
 		1, 5, 6,
 		1, 6, 2,
 		6, 5, 4,
-		6, 4, 7,
-
-		//triangle
-		8, 9, 10});
+		6, 4, 7});
+		
 	cube->setupModel();
+	//cube->addInstance(vector<glm::vec3>{glm::vec3(0,0,0)});
 
 	Shader *shader = new Shader{"vert.glsl", "frag.glsl"};
 
 	world = new World{};
 	world->worldShader.push_back(shader);
 	world->models.push_back(cube);
+	
 
 	{
 		// /************* Asset loading Start... ****************************/

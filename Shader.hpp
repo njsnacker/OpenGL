@@ -29,6 +29,10 @@ public:
 		}
 	}
 
+	void set_uniform(const std::string& name, const vector<glm::vec3>) {
+		
+	}
+
 	void set_uniform(const std::string& name, const bool value) {
 		GLint location = glGetUniformLocation(shaderId, name.c_str());
 		if (location != -1) {
