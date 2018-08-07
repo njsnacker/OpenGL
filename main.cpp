@@ -139,7 +139,7 @@ int main()
 		6, 4, 7});
 		
 	cube->setupModel();
-	//cube->addInstance(vector<glm::vec3>{glm::vec3(0,0,0)});
+	cube->addInstance(vector<glm::vec3>{glm::vec3(6,6,6)});
 
 	Shader *shader = new Shader{"vert.glsl", "frag.glsl"};
 

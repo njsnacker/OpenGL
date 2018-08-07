@@ -23,7 +23,6 @@ public:
 
     glm::vec3 centorPos, maxPos, minPos;
     glm::mat4 modelMatrix;
-    
 
     GLuint VAO, VBO, EBO, instanceVBO;
 
@@ -76,6 +75,7 @@ public:
         this->instancePoses.push_back(glm::vec3(0,0,0));
 
         glGenVertexArrays(1, &VAO);
+        glBindVertexArray(VAO); //순서.. 반드시 여기와야함?
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
         glGenBuffers(1, &instanceVBO);
@@ -91,7 +91,7 @@ public:
 
         // setting VAO
         // vertex positions
-        glBindVertexArray(VAO);
+        
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
 
@@ -117,7 +117,6 @@ public:
         glBindVertexArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-        
     }
 
     void updateModel() {
@@ -129,11 +128,11 @@ public:
     void draw(Shader* pShader) {
         glUseProgram(pShader->shaderId);
         pShader->set_uniform("modelMatrix",modelMatrix);
-        //glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        // glBindBuffer(GL_ARRAY_BUFFER, VBO); 주석해도 돌아감
+        // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
         glBindVertexArray(VAO);
-        //glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, instancePoses.size());
-        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glDrawElementsInstanced(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0, instancePoses.size());
+        //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
     }
 };
