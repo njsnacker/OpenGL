@@ -4,16 +4,21 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "buil",
+            "label": "build",
             "type": "shell",
             "command": "nvcc -std=c++14 -g -o OpenGL_Renderer *.cpp ${workspaceFolder}/CUDA/*.cu -lglfw -lGLEW -lGL",
-            "args": [
-            
-            ],
+            "args": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
+        },
+        {
+            "label": "stam's fluid",
+            "type": "shell",
+            "command": "g++ -std=c++14 -g -o fluid fluid.cpp",
+            "group": "build",
+            "problemMatcher": []
         }
     ]
 }

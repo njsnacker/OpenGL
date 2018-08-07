@@ -21,6 +21,7 @@ public:
     static vector<uint32_t> indices;
     glm::vec3 centorPos, maxPos, minPos;
     glm::mat4 modelMatrix;
+    uint32_t instanceCount = 0;
 
     GLuint VAO, VBO, EBO;
 
