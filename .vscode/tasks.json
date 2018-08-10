@@ -16,7 +16,7 @@
         {
             "label": "stam's fluid",
             "type": "shell",
-            "command": "g++ -std=c++14 -g -o fluid fluid.cpp",
+            "command": "g++ -std=c++14 -g -o ./fluid/fluid ./fluid/fluid.cpp",
             "group": "build",
             "problemMatcher": []
         },
