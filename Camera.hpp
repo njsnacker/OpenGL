@@ -1,8 +1,10 @@
 #include <iostream>
 #include <glm/common.hpp>
 #include <glm/matrix.hpp>
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
+
 
 using namespace std;
 
@@ -22,7 +24,7 @@ public:
             camUpDirection = glm::vec3(0.0f, 1.0f, 0.0f);
     int windowWidth = 1920;
     int windowHeight = 1080;
-    float fov = 120, zNear = 0.001, zFar = 100;
+    float fov = 120, zNear = 0.001, zFar = 1000;
     float trackballScale = 1.0;
     float dollyScale = 1.0;
 
@@ -34,7 +36,7 @@ public:
         updateProjectionMatrix();
     }
 
-    void resize(int width_, int height_, float fov_ = 120.0, float zNear_ = 0.001, float zFar_ = 100) {
+    void resize(int width_, int height_, float fov_ = 120.0, float zNear_ = 0.001, float zFar_ = 1000) {
         windowWidth = width_;
         windowHeight = height_;
         fov = fov_;

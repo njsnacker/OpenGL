@@ -10,7 +10,9 @@
 #include "Light.hpp"
 #include "Shader.hpp"
 
-#include "./CUDA/kernel.hpp"
+#define N 32
+
+//#include "./CUDA/kernel.hpp"
 
 const uint32_t WINDOW_HEIGHT = 1080; //1080
 const uint32_t WINDOW_WIDTH = 1920;  //1920
@@ -64,7 +66,7 @@ void cursor_position_callback(GLFWwindow *window, double xpos, double ypos)
 int main()
 {
 
-	cudaFunc();
+	//cudaFunc();
 
 	// GLEW, GLFW init...
 	if (!glfwInit())
@@ -114,15 +116,16 @@ int main()
 	// Init end.
 
 	Model *cube = new Model{};
+	float cubeSize = 0.3;
 	cube->setVertices(vector<Vertex>{
-		Vertex{glm::vec3(0.5, 0.5, 0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-0.5, 0.5, 0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-0.5, -0.5, 0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(0.5, -0.5, 0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(0.5, 0.5, -0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-0.5, 0.5, -0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-0.5, -0.5, -0.5), glm::vec2(0, 0)},
-		Vertex{glm::vec3(0.5, -0.5, -0.5), glm::vec2(0, 0)}});
+		Vertex{glm::vec3(cubeSize, cubeSize, cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(-cubeSize, cubeSize, cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(-cubeSize, -cubeSize, cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(cubeSize, -cubeSize, cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(cubeSize, cubeSize, -cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(-cubeSize, cubeSize, -cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(-cubeSize, -cubeSize, -cubeSize), glm::vec2(0, 0)},
+		Vertex{glm::vec3(cubeSize, -cubeSize, -cubeSize), glm::vec2(0, 0)}});
 
 	cube->setIndices(vector<uint32_t>{
 		0, 1, 2,
@@ -139,7 +142,20 @@ int main()
 		6, 4, 7});
 		
 	cube->setupModel();
-	cube->addInstance(vector<glm::vec3>{glm::vec3(6,6,6)});
+	
+	vector<glm::vec3> instances;
+	for (int i = -N/2; i< N/2; i++) {
+		for (int j = -N/2; j<N/2; j++) {
+			for (int k = -N/2 ; k < N/2 ; k++) {
+				instances.push_back(glm::vec3(i,j,k));
+			}
+			
+		}
+	}
+
+	cube->addInstance(instances);
+
+
 
 	Shader *shader = new Shader{"vert.glsl", "frag.glsl"};
 
