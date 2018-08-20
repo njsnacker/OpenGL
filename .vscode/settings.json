@@ -12,6 +12,7 @@
         "*.tcc": "cpp",
         "cmath": "cpp",
         "initializer_list": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "iosfwd": "cpp"
     }
 }

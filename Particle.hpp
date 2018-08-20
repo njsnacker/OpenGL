@@ -1,73 +1,84 @@
-// #pragma once
-// #include <iostream>
-// #include <vector>
-// #include <glm/common.hpp>
-// #include <glm/gtx/transform.hpp>
+#pragma once
+#include "Model.hpp"
+#include <vector>
+#include <glm/common.hpp>
+#include "Shader.hpp"
 
-// #include "Shader.hpp"
+using namespace std;
 
-// using namespace std;
 
-// class Particle {
+
+class Particle {
+public:
+    glm::vec3 pos = glm::vec3(0,0,0);
+    glm::vec3 velocity = glm::vec3(0,0,0);
+    glm::vec4 color = glm::vec4(0,0,0,0);
+    float size = 0 , angle = 0, weight = 0;
+    float lifeTime = 0;
+};
+
+
+class ParticleSystem : private Model {
+public:
+
+    vector<Particle> mParticles;
+
+    ParticleSystem() {
+        this->loadObj("./sphere.obj");
+        setupModel();
+    }
+
+    void initParticles(const vector<Particle> partices_) {
+        mParticles = partices_;
+        vector<glm::vec3> tmpInstancePoses;
+        for (auto &itr : mParticles) {
+            tmpInstancePoses.push_back(itr.pos);
+        }
+        updateInstance(tmpInstancePoses);
+    }
+
+    void updateParticles() {
+        vector<glm::vec3> tmpInstancePoses;
+        for (auto &itr : mParticles) {
+            tmpInstancePoses.push_back(itr.pos);
+        }
+        updateInstance(tmpInstancePoses);
+    }
+
+    void draw(Shader* pShader_) {
+        Model::draw(pShader_);
+    }
+};
+
+// class ParticleSystem {
 // public:
-//     uint32_t maxNum;
-//     vector<glm::vec3> poses;
-//     vector<glm::vec3> vertices{
-// 		glm::vec3(0.5, 0.5, 0.5),
-// 		glm::vec3(-0.5, 0.5, 0.5),
-// 		glm::vec3(-0.5, -0.5, 0.5),
-// 		glm::vec3(0.5, -0.5, 0.5),
-// 		glm::vec3(0.5, 0.5, -0.5),
-// 		glm::vec3(-0.5, 0.5, -0.5),
-// 		glm::vec3(-0.5, -0.5, -0.5),
-// 		glm::vec3(0.5, -0.5, -0.5)};
-    
-//     vector<uint32_t> indices {
-//         0, 1, 2,
-// 		0, 2, 3,
-// 		4, 0, 3,
-// 		4, 3, 7,
-// 		5, 1, 0,
-// 		5, 0, 4,
-// 		6, 7, 3,
-// 		6, 3, 2,
-// 		1, 5, 6,
-// 		1, 6, 2,
-// 		6, 5, 4,
-// 		6, 4, 7
-//     };
-    
-//     GLuint VAO, VBO, EBO;
+//     vector<Particle> particles;
+//     GLuint VAO, VBO;
 
-//     Particle() {
-//     }
+//     void setupModel() {
+//         //this->instancePoses.push_back(glm::vec3(0,0,0));
 
-//     ~Particle() {
-//     }
-
-//     void setupParticle() {
 //         glGenVertexArrays(1, &VAO);
-//         glBindVertexArray(VAO);
+//         glBindVertexArray(VAO); //순서.. 반드시 여기와야함?
 //         glGenBuffers(1, &VBO);
-//         glGenBuffers(1, &EBO);
 
+//         // setting VBO
 //         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW); 
+//         glBufferData(GL_ARRAY_BUFFER, particles.size() * sizeof(Particle), &particles[0], GL_STATIC_DRAW); 
 
-//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-//         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint32_t), &indices[0], GL_STATIC_DRAW);
-
+//         // setting VAO
 //         // vertex positions
+        
 //         glEnableVertexAttribArray(0);
-//         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, pos));
+//         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, pos));
 
 //         // vertex normals
 //         // glEnableVertexAttribArray(1);
 //         // glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
 //         // vertex texture coords
-//         glEnableVertexAttribArray(1);
-//         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoord));
+//         glEnableVertexAttribArray(2);
+//         glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Particle), (void*)offsetof(Particle, color));
 
 //         glBindVertexArray(0);
 //         glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -76,20 +87,33 @@
 
 //     void updateModel() {
 //         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-// 	    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), &vertices[0]);      //replace data in VBO with new data
+// 	    glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(Particle), &particles[0]);      //replace data in VBO with new data
 // 	    glBindBuffer(GL_ARRAY_BUFFER, 0);
 //     }
 
 //     void draw(Shader* pShader) {
+        
 //         glUseProgram(pShader->shaderId);
-//         //pShader->set_uniform("modelMatrix",modelMatrix);
-//         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-//         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+//         glPointSize(15);
+//         glEnable(GL_POINT_SMOOTH);
+//         glEnable(GL_BLEND);
+//         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+//         pShader->set_uniform("modelMatrix",glm::mat4{1});
 //         glBindVertexArray(VAO);
-//         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+//         glDrawArrays( GL_POINTS, 0, particles.size());
+//         //glDrawArrays(GL_POINTS, 0, particles.size());
+//         //glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 //         glBindVertexArray(0);
+
+//         // glBegin(GL_POINTS);
+//         // for (int i = 0; i<particles.size(); i++) {
+//         //     glVertex3fv((GLfloat*)&particles[i].pos);
+//         // }
+//         // glEnd();
 //     }
+
+// private:
+
 // };
 
-// vector<Vertex> Model::vertices;
-// vector<uint32_t> Model::indices;
+

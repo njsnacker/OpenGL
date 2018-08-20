@@ -9,8 +9,9 @@
 #include "Model.hpp"
 #include "Light.hpp"
 #include "Shader.hpp"
+#include "Particle.hpp"
 
-#define N 32
+#define N 3
 
 //#include "./CUDA/kernel.hpp"
 
@@ -107,7 +108,15 @@ int main()
 
 	glClearColor(156 / 255.0f, 167 / 255.0f, 186 / 255.0f, 1);
 
+
+
+	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST); 
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST); 
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 	glDepthFunc(GL_LESS);
 	glEnable(GL_NORMALIZE);
 	glShadeModel(GL_SMOOTH);
@@ -115,107 +124,37 @@ int main()
 	glLoadIdentity();
 	// Init end.
 
-	Model *cube = new Model{};
-	float cubeSize = 0.3;
-	cube->setVertices(vector<Vertex>{
-		Vertex{glm::vec3(cubeSize, cubeSize, cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-cubeSize, cubeSize, cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-cubeSize, -cubeSize, cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(cubeSize, -cubeSize, cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(cubeSize, cubeSize, -cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-cubeSize, cubeSize, -cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(-cubeSize, -cubeSize, -cubeSize), glm::vec2(0, 0)},
-		Vertex{glm::vec3(cubeSize, -cubeSize, -cubeSize), glm::vec2(0, 0)}});
-
-	cube->setIndices(vector<uint32_t>{
-		0, 1, 2,
-		0, 2, 3,
-		4, 0, 3,
-		4, 3, 7,
-		5, 1, 0,
-		5, 0, 4,
-		6, 7, 3,
-		6, 3, 2,
-		1, 5, 6,
-		1, 6, 2,
-		6, 5, 4,
-		6, 4, 7});
-		
-	cube->setupModel();
+	ParticleSystem* ps = new ParticleSystem{};
 	
-	vector<glm::vec3> instances;
+	vector<Particle> particles;
 	for (int i = -N/2; i< N/2; i++) {
 		for (int j = -N/2; j<N/2; j++) {
 			for (int k = -N/2 ; k < N/2 ; k++) {
-				instances.push_back(glm::vec3(i,j,k));
+				particles.push_back(Particle{glm::vec3(i,j,k)});
 			}
 			
 		}
 	}
-
-	cube->addInstance(instances);
-
-
+	ps->initParticles(particles);
 
 	Shader *shader = new Shader{"vert.glsl", "frag.glsl"};
 
 	world = new World{};
 	world->worldShader.push_back(shader);
-	world->models.push_back(cube);
+	world->particleSystem = ps;
 	
-
-	{
-		// /************* Asset loading Start... ****************************/
-		// // set gun
-		// world.m_fixed.push_back(Model("../Assets/wapon.dae"));
-		// world.m_fixed[0].scale(0.2f);
-		// world.m_fixed[0].rotate(glm::radians(-100.0f), glm::vec3(1, 0, 0));
-		// world.m_fixed[0].rotate(glm::radians(190.0f), glm::vec3(0, 1, 0));
-		// world.m_fixed[0].rotate(glm::radians(-10.0f), glm::vec3(0, 0, 1));
-		// world.m_fixed[0].translate(glm::vec3(0.3f, -0.4f, -0.5f));
-		// for (auto &itr : world.m_fixed) {
-		// 	itr.update_meshes();
-		// }
-
-		// // main object
-		// world.m_objects.push_back(Model("../Assets/monster.dae"));
-		// world.m_objects[0].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
-		// world.m_objects.push_back(Model("../Assets/bullet.dae"));
-		// world.m_objects[1].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
-		// world.m_objects.push_back(Model("../Assets/particle.dae"));
-		// for (auto &itr : world.m_objects) {
-		// 	itr.update_meshes();
-		// }
-
-		// // set terrarians
-		// world.m_terrarians.push_back(Model("../Assets/plane.dae"));
-		// world.m_terrarians.push_back(Model("../Assets/ship.dae"));
-		// world.m_terrarians[1].scale(2.0f);
-		// world.m_terrarians[1].rotate(glm::radians(-90.0f), glm::vec3(1, 0, 0));
-		// world.m_terrarians[1].translate(glm::vec3(0,30,0));
-		// world.m_terrarians.push_back(Model("../Assets/sky.dae"));
-		// for (auto &itr : world.m_terrarians) {
-		// 	itr.update_meshes();
-		// }
-
-		// cout << "Asseets load end " << endl;
-		// /********* Asset loading End... **********************************/
-
-		//world.init_physics();
-		//GL_btDebugDraw bulletDebugugger;
-		//bulletDebugugger.setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-		//world.m_dynamicsWorld->setDebugDrawer(&bulletDebugugger);
-		//world.m_dynamicsWorld->getDebugDrawer()->setDebugMode(btIDebugDraw::DBG_DrawWireframe);
-	}
-
+	world->initPhysics();
+	gCurerntTime = glfwGetTime();
+	gDeltaTime = gCurerntTime - gLastTime;
+	gLastTime = gCurerntTime;
+	
 	while (!glfwWindowShouldClose(window))
 	{
-		//cube->rotate(glm::vec3(1,1,1), 0.03);
-
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// world.update_physics(g_delta_time);
-		world->draw();
+		world->updatePyhsics(gDeltaTime);
+		world->drawModel();
+		world->drawParticle();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
