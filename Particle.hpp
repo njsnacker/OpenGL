@@ -1,5 +1,6 @@
 #pragma once
 #include "Model.hpp"
+#include <cmath>
 #include <vector>
 #include <glm/common.hpp>
 #include "Shader.hpp"
@@ -12,9 +13,16 @@ class Particle {
 public:
     glm::vec3 pos = glm::vec3(0,0,0);
     glm::vec3 velocity = glm::vec3(0,0,0);
+    glm::vec3 pressure = glm::vec3(0,0,0);
+    glm::vec3 accelration = glm::vec3(0,0,0);
     glm::vec4 color = glm::vec4(0,0,0,0);
-    float size = 0 , angle = 0, weight = 0;
+    float size = 0 , angle = 0, weight = 0, mass = 0;
+    float density = 0;
     float lifeTime = 0;
+
+    float distance(const Particle& p2) {
+        abs(glm::distance(this->pos, p2.pos));
+    }
 };
 
 

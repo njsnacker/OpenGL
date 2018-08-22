@@ -11,7 +11,7 @@
 #include "Shader.hpp"
 #include "Particle.hpp"
 
-#define N 3
+#define N 128
 
 //#include "./CUDA/kernel.hpp"
 
