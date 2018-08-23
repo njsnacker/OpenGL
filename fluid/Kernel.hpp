@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/common.hpp"
+#include <cmath>
 // refer https://github.com/PaulKennedyDIT/SPH/blob/master/Assets/Code/SPH/Poly6.cs
 // math
 
@@ -14,6 +15,6 @@
 
 class Kernel {
     virtual float calculate() = 0;
-    virtual glm::vec3 calculateGradient() = 0;
+    virtual float calculateGradient() = 0;
     virtual float calculateLaplacian() = 0;
 };

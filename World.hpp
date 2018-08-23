@@ -22,8 +22,8 @@ public:
     void initPhysics() {
         
         physics = new PhysicsSimulator();
-        physics->models = models;
-        physics->particleSystem = particleSystem;
+        physics->mModels = models;
+        physics->mParticleSystem = particleSystem;
     }
 
 

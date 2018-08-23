@@ -11,14 +11,14 @@
 #include "Shader.hpp"
 #include "Particle.hpp"
 
-#define N 128
+#define N 8 //MAA 64 in 1050
 
 //#include "./CUDA/kernel.hpp"
 
-const uint32_t WINDOW_HEIGHT = 1080; //1080
-const uint32_t WINDOW_WIDTH = 1920;  //1920
-//const uint32_t WINDOW_HEIGHT  = 600;
-//const uint32_t WINDOW_WIDTH = 800;
+// const uint32_t WINDOW_HEIGHT = 1080; //1080
+// const uint32_t WINDOW_WIDTH = 1920;  //1920
+const uint32_t WINDOW_HEIGHT  = 600;
+const uint32_t WINDOW_WIDTH = 800;
 const float WINDOW_FPS = 60;
 const char *WINDOW_TITLE = "OpenGL Renderer";
 World *world;
@@ -127,12 +127,12 @@ int main()
 	ParticleSystem* ps = new ParticleSystem{};
 	
 	vector<Particle> particles;
-	for (int i = -N/2; i< N/2; i++) {
-		for (int j = -N/2; j<N/2; j++) {
-			for (int k = -N/2 ; k < N/2 ; k++) {
+	float distanceFromOrigin = 0.5;
+	for (int i = distanceFromOrigin; i< N; i++) {
+		for (int j = distanceFromOrigin; j<N; j++) {
+			for (int k = distanceFromOrigin ; k < N ; k++) {
 				particles.push_back(Particle{glm::vec3(i,j,k)});
 			}
-			
 		}
 	}
 	ps->initParticles(particles);
@@ -155,7 +155,7 @@ int main()
 		world->updatePyhsics(gDeltaTime);
 		world->drawModel();
 		world->drawParticle();
-
+		
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 

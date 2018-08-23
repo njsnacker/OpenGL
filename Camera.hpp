@@ -4,24 +4,16 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
-
+#include "Dump.hpp"
 
 using namespace std;
 
-void dumpMat4(glm::mat4 mat_) {
-    cout << "=======" << endl;
-    cout << mat_[0][0] << " "  << mat_[0][1]  << " "<< mat_[0][2]  << " "<< mat_[0][3] << " "<< endl;
-    cout << mat_[1][0] << " "  << mat_[1][1]  << " "<< mat_[1][2]  << " "<< mat_[1][3] << " "<< endl;
-    cout << mat_[2][0] << " "  << mat_[2][1]  << " "<< mat_[2][2]  << " "<< mat_[2][3] << " "<< endl;
-    cout << mat_[3][0] << " "  << mat_[3][1]  << " "<< mat_[3][2]  << " "<< mat_[3][3] << " "<< endl;
-    cout << "=======" << endl;
-}
 
 class Camera {
 public:
-    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, -10.0f), 
-            camForwardDirection = glm::vec3(0.0f, 0.0f, -1.0f), 
-            camUpDirection = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, -40.0f), 
+            camForwardDirection = glm::vec3(-0.79223, 0.0697814, 0.606238), 
+            camUpDirection = glm::vec3(0.247076, 0.945082, 0.214093);
     int windowWidth = 1920;
     int windowHeight = 1080;
     float fov = 120, zNear = 0.001, zFar = 1000;
@@ -92,6 +84,9 @@ private:
     glm::mat4 projectionMatrix, viewMatrix;
 
     void updateViewMatrix() {
+        // dumpVec3(camPos);
+        // dumpVec3(camForwardDirection);
+        // dumpVec3(camUpDirection);
         viewMatrix = glm::translate(camPos)*glm::mat4_cast(camQuat);
         //viewMatrix = glm::lookAt(camPos, camPos + camForwardDirection, camUpDirection);
     }
