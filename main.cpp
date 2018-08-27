@@ -127,14 +127,14 @@ int main()
 	ParticleSystem* ps = new ParticleSystem{};
 	
 	vector<Particle> particles;
-	float distanceFromOrigin = 1;
-	for (int i = distanceFromOrigin; i< N; i++) {
-		for (int j = distanceFromOrigin; j<N; j++) {
-			for (int k = distanceFromOrigin ; k < N ; k++) {
+	float distanceFromOrigin = 10;
+	for (int i = distanceFromOrigin; i< N+distanceFromOrigin; i++) {
+		for (int j = distanceFromOrigin; j<N+distanceFromOrigin; j++) {
+			for (int k = distanceFromOrigin ; k < N+distanceFromOrigin; k++) {
 				particles.push_back(Particle{glm::vec3(i,j,k)});
 			}
 		}
-	}
+	} 
 	ps->initParticles(particles);
 
 	Shader *shader = new Shader{"vert.glsl", "frag.glsl"};
