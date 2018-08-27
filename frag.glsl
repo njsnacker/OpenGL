@@ -7,6 +7,7 @@ in vec2 uv;
 in vec3 pos;
 
 void main() {
-	FragColor = vec4(pos.xyz, 1.0f);
+	// FragColor = vec4(pos.xyz, 1.0f);
+	FragColor = vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	//FragColor = vec4(texture(material_texture_diffuse1, uv.xy).rgb, 1.0);
 }

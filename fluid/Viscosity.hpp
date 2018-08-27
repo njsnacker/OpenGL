@@ -2,29 +2,31 @@
 #include "Kernel.hpp"
 
 //https://nccastaff.bournemouth.ac.uk/jmacey/MastersProjects/MSc15/06Burak/BurakErtekinMScThesis.pdf
-class Poly6 : Kernel {
+class Viscosity : Kernel {
 public:
-    float inverseH10 = 0.f;
-    float inverseH9 = 0.f;
+    float inverseH6 = 0.f;
     
-    Poly6(Particle& p1) {
+    Viscosity(Particle& p1) {
         mP1 = p1;
-        inverseH10 = 1/pow(h,10);
-        inverseH9 = 1/pow(h,9);
-        scale = (315/(64*M_PI))*inverseH9;
+        inverseH6 = 1/pow(h,6);
+        scale = 15*inverseH6*M_PI;
     }
 
     void update(Particle& p2) {
         this->diffVec = -(mP1.pos - p2.pos);
         this->r = mP1.distance(p2);
-        inverseR = 1/r;
+        if (r!=0)  {
+            inverseR = 1/r;
+        } else {
+            inverseR = 1;
+        }
         hrSQ = (h*h - r*r);
         hr = h-r;
     }
 
     float calculate() override {
         if ( r<=h) {
-            return scale * pow(hrSQ,3);
+            return 0;
         }
         return 0;
     }
@@ -32,7 +34,7 @@ public:
 
     glm::vec3 calculateGradient() override {
         if ( r<= h) {
-            return -6*scale*hrSQ*hrSQ*diffVec;
+            return glm::vec3{0,0,0};
         }
 
         return glm::vec3{0,0,0};
@@ -40,7 +42,7 @@ public:
 
     float calculateLaplacian() override {
         if (r<=h) {
-            return -6*scale*hrSQ*(3*h*h - 7*r*r);
+            return 3*scale*hr;
         }
 
         return 0;

@@ -13,11 +13,9 @@ class Particle {
 public:
     glm::vec3 pos = glm::vec3(0,0,0);
     glm::vec3 velocity = glm::vec3(0,0,0);
-    glm::vec3 pressure = glm::vec3(0,0,0);
     glm::vec3 acceleration = glm::vec3(0,0,0);
-    glm::vec4 color = glm::vec4(0,0,0,0);
     float size = 0 , angle = 0, mass = 1;
-    float density = 0;
+    float density = 0, pressure = 0;
     float lifeTime = 0;
 
     float distance(const Particle& p2) {
@@ -28,7 +26,7 @@ public:
 
 class ParticleSystem : private Model {
 public:
-
+    float mDensityOffset = 1.0f;
     vector<Particle> mParticles;
 
     ParticleSystem() {

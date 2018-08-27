@@ -15,10 +15,10 @@
 
 //#include "./CUDA/kernel.hpp"
 
-// const uint32_t WINDOW_HEIGHT = 1080; //1080
-// const uint32_t WINDOW_WIDTH = 1920;  //1920
-const uint32_t WINDOW_HEIGHT  = 600;
-const uint32_t WINDOW_WIDTH = 800;
+const uint32_t WINDOW_HEIGHT = 1080; //1080
+const uint32_t WINDOW_WIDTH = 1920;  //1920
+// const uint32_t WINDOW_HEIGHT  = 600;
+// const uint32_t WINDOW_WIDTH = 800;
 const float WINDOW_FPS = 60;
 const char *WINDOW_TITLE = "OpenGL Renderer";
 World *world;
@@ -127,7 +127,7 @@ int main()
 	ParticleSystem* ps = new ParticleSystem{};
 	
 	vector<Particle> particles;
-	float distanceFromOrigin = 0.5;
+	float distanceFromOrigin = 1;
 	for (int i = distanceFromOrigin; i< N; i++) {
 		for (int j = distanceFromOrigin; j<N; j++) {
 			for (int k = distanceFromOrigin ; k < N ; k++) {

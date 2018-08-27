@@ -11,7 +11,7 @@ using namespace std;
 
 class Camera {
 public:
-    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, -40.0f), 
+    glm::vec3 camPos = glm::vec3(0.0f, 0.0f, -152.0f), 
             camForwardDirection = glm::vec3(-0.79223, 0.0697814, 0.606238), 
             camUpDirection = glm::vec3(0.247076, 0.945082, 0.214093);
     int windowWidth = 1920;
@@ -21,7 +21,8 @@ public:
     float dollyScale = 1.0;
 
     Camera() {
-        camQuat = glm::angleAxis(glm::degrees(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        // camQuat = glm::angleAxis(glm::degrees(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+        camQuat = glm::quat(0.279492,-0.268077, 0.918582, -0.0789178);
         isTrackballSet = false;
 
         updateViewMatrix();
@@ -88,6 +89,8 @@ private:
         // dumpVec3(camForwardDirection);
         // dumpVec3(camUpDirection);
         viewMatrix = glm::translate(camPos)*glm::mat4_cast(camQuat);
+        cout << camPos.x << " " << camPos.y << " " <<  camPos.z << " " << endl;
+        cout << camQuat.x << " " << camQuat.y << " " <<  camQuat.z << " " <<  camQuat.w << " " << endl;
         //viewMatrix = glm::lookAt(camPos, camPos + camForwardDirection, camUpDirection);
     }
 
